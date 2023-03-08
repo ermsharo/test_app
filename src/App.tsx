@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./App.css";
 import styled from "styled-components";
 export interface FormInputs {
@@ -43,11 +43,50 @@ const SearchBox = styled.div`
   grid-gap: 1rem;
 `;
 
+const ProductRequest = () => {
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<boolean | String>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const fetchData = async (): Promise<void> => {
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await axios.get<any>(
+        `https://fakestoreapi.com/products`
+      );
+      setData(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Axios Error with Message: " + error.message);
+        setError(true);
+      }
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return [data, error, loading] as const;
+};
+
 function App() {
   const [formInputs, setFormInputs] = useState<FormInputs>({
     search: "",
     filter: "",
   });
+  const [filteredData, setFilteredData] = useState<any>();
+  const [data, error, loading] = ProductRequest();
+
+  useEffect(() => {
+    if (data !== null) {
+      console.log("temos data", data);
+      
+    }
+  }, [data]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
@@ -80,6 +119,15 @@ function App() {
           </div>
         </SearchBox>
       </BoardBox>
+      {loading && <div>loading</div>}
+      {error && <div>error</div>}
+      {data && (
+        <div>
+          {data.map((item: any, index: number) => {
+            return <div key={index}>{item.title}</div>;
+          })}
+        </div>
+      )}
     </div>
   );
 }
