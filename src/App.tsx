@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import ExampleComp from "./ExampleComp";
 import { initData } from "./data";
 
@@ -12,10 +12,10 @@ function App() {
   const [items, setItems] = useState<itemData[]>(initData);
 
   const onFilter = (searchParam: string) => {
-    console.log("parameter", searchParam);
-
-    const filterdData = initData.filter(item => item.title.toUpperCase().includes(searchParam.toUpperCase()));
-    setItems(filterdData); 
+    const filteredData = initData.filter((item) =>
+      item.title.toUpperCase().includes(searchParam.toUpperCase())
+    );
+    setItems(filteredData);
   };
   return <ExampleComp items={items} onFilter={onFilter} />;
 }

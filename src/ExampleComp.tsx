@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { itemData } from "./type";
 import styled from "styled-components";
 
@@ -41,15 +41,14 @@ const ElementsBox = styled.div`
 
 const Element = styled.div`
   border: 1px solid black;
+  padding: 1rem;
 `;
 
-function ExampleComp({items, onFilter} : FormInputs) {
+function ExampleComp({ items, onFilter }: FormInputs) {
   const [search, setSearch] = useState<string>("");
-
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    console.log("value", value);
     onFilter(value);
     setSearch(value);
   }
@@ -57,6 +56,7 @@ function ExampleComp({items, onFilter} : FormInputs) {
   return (
     <div className="App">
       <BoardBox>
+        <h1>Search example</h1>
         <SearchBox>
           <Input
             type="text"
@@ -68,7 +68,22 @@ function ExampleComp({items, onFilter} : FormInputs) {
           />
         </SearchBox>
 
-        <ElementsBox></ElementsBox>
+        <ElementsBox>
+          {items.length !== 0 ? (
+            items.map((item, index) => {
+              return (
+                <Element key={index}>
+                  <h2>{item.title}</h2>
+                  <h3>{item.description}</h3>
+                </Element>
+              );
+            })
+          ) : (
+            <Element>
+              <h1>Not found any item</h1>
+            </Element>
+          )}
+        </ElementsBox>
       </BoardBox>
     </div>
   );
