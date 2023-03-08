@@ -9,5 +9,5 @@ Open [http://localhost:3000](http://localhost:3000)
 
 
 ## Crated by
-Emilio Haro
-contact : ermsharo@gmail.com
+Emilio Haro ; 
+Contact : ermsharo@gmail.com
